@@ -1,12 +1,12 @@
 {
-  "description": "Auto-commit on Stop and prepare new commit on SessionStart",
+  "description": "Auto-commit on Stop and prepare new commit on UserPromptSubmit",
   "hooks": {
-    "SessionStart": [
+    "UserPromptSubmit": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/session-start.sh",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/prepare-commit.sh",
             "timeout": 10
           }
         ]
