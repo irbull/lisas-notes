@@ -61,8 +61,15 @@ done < "$transcript_path"
 
 echo "Last message length: ${#last_message} chars" >> "$LOG_FILE"
 
-# If we found a message, commit with it
-if [ -n "$last_message" ]; then
+# Check if current commit has any file changes
+is_empty=$(cd "$cwd" && jj log -r @ --no-graph -T 'empty')
+
+echo "Is current commit empty (no file changes): $is_empty" >> "$LOG_FILE"
+
+# If we found a message and there are actual file changes, commit
+if [ "$is_empty" = "true" ]; then
+    echo "No file changes, skipping commit" >> "$LOG_FILE"
+elif [ -n "$last_message" ]; then
     echo "Running: jj commit in $cwd" >> "$LOG_FILE"
     cd "$cwd" && jj commit -m "$last_message" >> "$LOG_FILE" 2>&1 || echo "jj commit failed with exit code $?" >> "$LOG_FILE"
 else
