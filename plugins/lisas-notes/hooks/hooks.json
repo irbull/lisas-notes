@@ -1,6 +1,17 @@
 {
-  "description": "Auto-commit on Stop using last line as commit message",
+  "description": "Auto-commit on Stop and prepare new commit on SessionStart",
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/session-start.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
