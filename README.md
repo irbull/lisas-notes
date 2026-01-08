@@ -4,16 +4,17 @@ A Claude Code plugin that automatically records each completed Claude interactio
 
 ## Why "Lisa's Notes"?
 
-Just like Lisa Simpson meticulously documents everything in her diary, this plugin keeps a detailed record of every change Claude makes to your codebase. Each time you finish working with Claude, the plugin automatically creates a Jujutsu commit using the last line of Claude's response as the commit message—ensuring nothing gets lost or forgotten.
+Just like Lisa Simpson meticulously documents everything in her diary, this plugin keeps a detailed record of every change Claude makes to your codebase. Each time you finish working with Claude, the plugin automatically creates a Jujutsu commit using Claude's final response as the commit message—ensuring nothing gets lost or forgotten.
 
 ## How It Works
 
 The plugin hooks into Claude's "Stop" event. When you end a Claude session:
 
-1. The plugin reads Claude's conversation transcript
-2. It extracts the last non-empty line from Claude's final response
-3. It creates a Jujutsu commit with that line as the commit message
-4. All operations are logged to `/tmp/lisas-notes-debug.log` for troubleshooting
+1. The plugin reads Claude's conversation transcript (a JSON Lines file)
+2. It parses each line looking for assistant messages
+3. It extracts the **full text content** from the last assistant message (combining all text blocks)
+4. It creates a Jujutsu commit using that complete message as the commit message
+5. All operations are logged to `/tmp/lisas-notes-debug.log` for troubleshooting
 
 This means every interaction with Claude results in a discrete, well-documented commit in your version history.
 
@@ -40,7 +41,7 @@ Once enabled, the plugin works automatically:
 
 1. Work with Claude in a Jujutsu-managed repository
 2. When you stop the Claude session (Ctrl+C or `/exit`), the plugin triggers
-3. Your changes are committed with the last line of Claude's response as the message
+3. Your changes are committed with Claude's final response as the message
 
 No manual intervention needed—just work with Claude and let Lisa keep the records.
 
